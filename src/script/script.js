@@ -69,13 +69,13 @@ document.addEventListener("keydown", (event) => {
 
         if (keys["w"]) moverPlayer1(-step, 0);
         if (keys["s"]) moverPlayer1(step, 0);
-        // if (keys["a"]) movePlayer1(0, -step);
-        // if (keys["d"]) movePlayer1(0, step);
+        // if (keys["a"]) moverPlayer1(0, -step);
+        // if (keys["d"]) moverPlayer1(0, step);
 
         if (keys["ArrowUp"]) moverPlayer2(-step, 0);
         if (keys["ArrowDown"]) moverPlayer2(step, 0);
-        // if (keys["j"]) movePlayer2(0, -step);
-        // if (keys["l"]) movePlayer2(0, step);
+        // if (keys["j"]) moverPlayer2(0, -step);
+        // if (keys["l"]) moverPlayer2(0, step);
         
     }
 });
@@ -138,7 +138,7 @@ function moverball() {
         if (topPositionBall <= 0 || topPositionBall >= viewRect.height - ball.offsetHeight) {
             ballDirectionY *= -1; 
         }
-    }, 25);
+    }, 30);
 }
 
 function checkCollision() {
@@ -191,7 +191,7 @@ function checkCollision() {
 }
 
 function speedsControl(){
-    if(speedball < 9){
+    if(speedball < 12){
         speedball += 1;
     }
     else{

@@ -24,6 +24,23 @@ body{
     justify-content: center;
 }
 
+.boxcredit{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.developer-credit {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    font-size: 14px;
+    color: #555;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-top: 1px solid #ddd;
+}
+
 #player1 {
     width: 20px;
     height: 150px;
