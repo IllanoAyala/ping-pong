@@ -69,13 +69,9 @@ document.addEventListener("keydown", (event) => {
     if (!start) {
         if (event.key === "w") player1Keys.up = true;
         if (event.key === "s") player1Keys.down = true;
-        // if (event.key === "a") player1Keys.left = true;
-        // if (event.key === "d") player1Keys.right = true;
 
         if (event.key === "ArrowUp") player2Keys.up = true;
         if (event.key === "ArrowDown") player2Keys.down = true;
-        // if (event.key === "j") player2Keys.left = true;
-        // if (event.key === "l") player2Keys.right = true;
 
         moverPlayers();
     }
@@ -85,13 +81,9 @@ document.addEventListener("keyup", (event) => {
     if (!start) {
         if (event.key === "w") player1Keys.up = false;
         if (event.key === "s") player1Keys.down = false;
-        // if (event.key === "a") player1Keys.left = false;
-        // if (event.key === "d") player1Keys.right = false;
 
         if (event.key === "ArrowUp") player2Keys.up = false;
         if (event.key === "ArrowDown") player2Keys.down = false;
-        // if (event.key === "j") player2Keys.left = false;
-        // if (event.key === "l") player2Keys.right = false;
 
         moverPlayers();
     }
@@ -100,13 +92,9 @@ document.addEventListener("keyup", (event) => {
 function moverPlayers() {
     if (player1Keys.up) moverPlayer1(-step, 0);
     if (player1Keys.down) moverPlayer1(step, 0);
-    // if (player1Keys.left) moverPlayer1(0, -step);
-    // if (player1Keys.right) moverPlayer1(0, step);
 
     if (player2Keys.up) moverPlayer2(-step, 0);
     if (player2Keys.down) moverPlayer2(step, 0);
-    // if (player2Keys.left) moverPlayer2(0, -step);
-    // if (player2Keys.right) moverPlayer2(0, step);
 }
 
 function moverPlayer1(topChange, leftChange) {
