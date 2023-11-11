@@ -19,7 +19,7 @@ let leftPositionBall = 400;
 let ballDirectionX = -1;
 let ballDirectionY = 0;
 let step = 20;
-let speedball = 4;
+let speedball = 3;
 let start = true;
 
 view.removeChild(player1);
@@ -175,11 +175,11 @@ function checkCollision() {
         ballRect.bottom >= player1Rect.top &&
         ballRect.top <= player1Rect.bottom
     ) {
-        if (ballRect.left < player1Rect.right + (player1Rect.height / 3)) {
+        if (ballRect.left < player1Rect.right + (player1Rect.height / 3) || ballRect.right < player1Rect.left + (player1Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
         } 
-        else if (ballRect.left > player1Rect.right - (player1Rect.height / 3)) {
+        else if (ballRect.left > player1Rect.right - (player1Rect.height / 3) || ballRect.left < player1Rect.right + (player1Rect.height / 3)) {
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
         } 
@@ -197,11 +197,11 @@ function checkCollision() {
         ballRect.bottom >= player2Rect.top &&
         ballRect.top <= player2Rect.bottom
     ) {
-        if (ballRect.right < player2Rect.left + (player2Rect.height / 3)) {
+        if (ballRect.right < player2Rect.left + (player2Rect.height / 3) || ballRect.left < player2Rect.right + (player2Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
         } 
-        else if (ballRect.right > player2Rect.left - (player2Rect.height / 3)) {            
+        else if (ballRect.right > player2Rect.left - (player2Rect.height / 3) || ballRect.right < player2Rect.left + (player2Rect.height / 3)) {            
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
         } 
