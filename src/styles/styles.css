@@ -1,0 +1,95 @@
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.boxbutton {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.View {
+    top: 20px;
+    display: flex;
+    background-color: #3498db; 
+    width: 900px;
+    height: 400px;
+    margin: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+    position: relative; 
+    justify-content: center;
+}
+
+#player1 {
+    width: 20px;
+    height: 150px;
+    background-color: #333; 
+    position: absolute; 
+}
+#player2 {
+    width: 20px;
+    height: 150px;
+    background-color: #333; 
+    position: absolute; 
+}
+
+#ball {
+    background-color: #ff0000;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+}
+
+.boxtitlegame{
+    display: flex;
+    align-items: center;
+}
+
+#gametitle{
+    font-family: 'Arial', sans-serif;
+    font-size: 56px;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #2c3e50; 
+    color: #fff; 
+    border: none;
+    border-radius: 5px;
+}
+
+#startbutton {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px 20px;
+    background-color: #000000; 
+    color: #fff; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+#startbutton:hover{
+    transform: scale(1.2);
+}
+
+#restartbutton {
+    height: 47px;
+    width: 47px;
+}
+
+#restartbutton:hover{
+    transform: scale(1.2);
+}
+
+button:hover {
+    background-color: #000000; 
+}
+
+button:active {
+    background-color: #000000; 
+}

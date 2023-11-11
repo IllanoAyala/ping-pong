@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iaKar</title>
+    <link href="src/styles/styles.css" type="text/css" rel="stylesheet">
+</head>
+<body>
+    <div>
+        <div class="View">
+            <div id="player1"></div>
+            <div id="player2"></div>
+            <div id="ball">
+                <img src="../style/Ball.svg" alt="">
+            </div>
+            <div class="boxtitlegame">
+                <h1 id="gametitle">Kiara</h1>
+            </div>           
+        </div>
+        <div class="boxbutton">
+            <button
+                id="startbutton"
+                onclick="handleStart()"
+            >
+                Start
+            </button>
+            <img src="src/styles/restart.svg" id="restartbutton">      
+        </div>
+    </div>
+    <script src="src/script/script.js"></script>
+</body>
+</html>
