@@ -7,6 +7,8 @@ const player1Rect = player1.getBoundingClientRect();
 const player2Rect = player2.getBoundingClientRect();
 const startButton = document.querySelector("#startbutton");
 const restartButton = document.querySelector("#restartbutton")
+const player1Keys = {};
+const player2Keys = {};
 
 let topPositonPlayer1 = 150;
 let leftPositionPlayer1 = 100;
@@ -65,26 +67,47 @@ restartButton.addEventListener("click", () => {
 
 document.addEventListener("keydown", (event) => {
     if (!start) {
-        keys[event.key] = true;
+        if (event.key === "w") player1Keys.up = true;
+        if (event.key === "s") player1Keys.down = true;
+        // if (event.key === "a") player1Keys.left = true;
+        // if (event.key === "d") player1Keys.right = true;
 
-        if (keys["w"]) moverPlayer1(-step, 0);
-        if (keys["s"]) moverPlayer1(step, 0);
-        // if (keys["a"]) moverPlayer1(0, -step);
-        // if (keys["d"]) moverPlayer1(0, step);
+        if (event.key === "ArrowUp") player2Keys.up = true;
+        if (event.key === "ArrowDown") player2Keys.down = true;
+        // if (event.key === "j") player2Keys.left = true;
+        // if (event.key === "l") player2Keys.right = true;
 
-        if (keys["ArrowUp"]) moverPlayer2(-step, 0);
-        if (keys["ArrowDown"]) moverPlayer2(step, 0);
-        // if (keys["j"]) moverPlayer2(0, -step);
-        // if (keys["l"]) moverPlayer2(0, step);
-        
+        moverPlayers();
     }
 });
 
 document.addEventListener("keyup", (event) => {
     if (!start) {
-        delete keys[event.key];
+        if (event.key === "w") player1Keys.up = false;
+        if (event.key === "s") player1Keys.down = false;
+        // if (event.key === "a") player1Keys.left = false;
+        // if (event.key === "d") player1Keys.right = false;
+
+        if (event.key === "ArrowUp") player2Keys.up = false;
+        if (event.key === "ArrowDown") player2Keys.down = false;
+        // if (event.key === "j") player2Keys.left = false;
+        // if (event.key === "l") player2Keys.right = false;
+
+        moverPlayers();
     }
 });
+
+function moverPlayers() {
+    if (player1Keys.up) moverPlayer1(-step, 0);
+    if (player1Keys.down) moverPlayer1(step, 0);
+    // if (player1Keys.left) moverPlayer1(0, -step);
+    // if (player1Keys.right) moverPlayer1(0, step);
+
+    if (player2Keys.up) moverPlayer2(-step, 0);
+    if (player2Keys.down) moverPlayer2(step, 0);
+    // if (player2Keys.left) moverPlayer2(0, -step);
+    // if (player2Keys.right) moverPlayer2(0, step);
+}
 
 function moverPlayer1(topChange, leftChange) {
     const newTop = topPositonPlayer1 + topChange;
@@ -93,8 +116,8 @@ function moverPlayer1(topChange, leftChange) {
     if (
         newTop >= 0 &&
         newLeft >= 0 &&
-        newTop + player1Rect.height <= (viewRect.height)&&
-        newLeft + player1Rect.width <= (viewRect.width)
+        newTop + player1Rect.height <= viewRect.height &&
+        newLeft + player1Rect.width <= viewRect.width
     ) {
         topPositonPlayer1 = newTop;
         leftPositionPlayer1 = newLeft;
@@ -111,8 +134,8 @@ function moverPlayer2(topChange, leftChange) {
     if (
         newTop >= 0 &&
         newLeft >= 0 &&
-        newTop + player2Rect.height <= (viewRect.height)&&
-        newLeft + player2Rect.width <= (viewRect.width)
+        newTop + player2Rect.height <= viewRect.height &&
+        newLeft + player2Rect.width <= viewRect.width
     ) {
         topPositonPlayer2 = newTop;
         leftPositionPlayer2 = newLeft;
@@ -138,7 +161,7 @@ function moverball() {
         if (topPositionBall <= 1 || topPositionBall >= viewRect.height - ball.offsetHeight) {
             ballDirectionY *= -1; 
         }
-    }, 30);
+    }, 25);
 }
 
 function checkCollision() {
