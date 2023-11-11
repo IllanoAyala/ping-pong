@@ -7,7 +7,7 @@ Este é um simples jogo implementado em JavaScript, HTML e CSS.
 ### Clone ou Faça Download do Repositório:
 
 ```bash
-git clone []
+git clone [https://github.com/IllanoAyala/Ping-Pong.git]
 ```
 
 Ou faça o download do repositório como um arquivo ZIP e extraia-o.
