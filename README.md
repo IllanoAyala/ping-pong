@@ -20,11 +20,11 @@ Navegue até o diretório do jogo e abra o arquivo `index.html` em seu navegador
 
 #### Jogador 1:
 
-Use as teclas `W` e `S` para mover a "raquete" para cima e para baixo, respectivamente.
+Use as teclas `W` e `S` para mover a raquete para cima e para baixo, respectivamente.
 
 #### Jogador 2:
 
-Use as setas `Seta para cima` e `Seta para baixo` para mover a "raquete" para cima e para baixo, respectivamente.
+Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima e para baixo, respectivamente.
 
 #### Objetivo do Jogo:
 
