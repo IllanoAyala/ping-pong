@@ -28,7 +28,7 @@ Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima
 
 #### Objetivo do Jogo:
 
-Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
+Mantenha a bola em movimento e evite que ela ultrapasse a raquete do jogador adversário.
 
 ### Qualquer BUG aperte o `Restart`
 
