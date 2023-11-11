@@ -30,4 +30,6 @@ Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima
 
 Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
 
+### Qualquer BUG aperte o `Restart`
+
 ### (Fiz esse jogo com o intuito de impressionar um garota)
