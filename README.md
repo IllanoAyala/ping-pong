@@ -32,4 +32,4 @@ Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
 
 ### Qualquer BUG aperte o `Restart`
 
-### (Fiz esse jogo com o intuito de impressionar um garota)
+### (Fiz esse jogo com o intuito de impressionar uma garota)
