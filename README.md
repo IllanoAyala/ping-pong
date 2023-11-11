@@ -7,7 +7,7 @@ Este é um simples jogo implementado em JavaScript, HTML e CSS.
 ### Clone ou Faça Download do Repositório:
 
 ```bash
-git clone [URL do Repositório]
+git clone []
 ```
 
 Ou faça o download do repositório como um arquivo ZIP e extraia-o.
@@ -28,4 +28,4 @@ Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima
 
 Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
 
-### Fiz esse jogo com o intuito de impressionar um garota.
+### (Fiz esse jogo com o intuito de impressionar um garota)
