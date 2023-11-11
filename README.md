@@ -1,6 +1,6 @@
-# Jogo de Ping-Pong
+# Ping-Pong
 
-Bem-vindo ao Jogo de Ping-Pong! Este é um simples jogo implementado em JavaScript, HTML e CSS. O jogo é uma versão digital do clássico jogo de ping-pong ou tênis de mesa, onde dois jogadores controlam raquetes para rebater uma bola de um lado para o outro.
+Este é um simples jogo implementado em JavaScript, HTML e CSS.
 
 ## Instruções de Uso
 
@@ -26,4 +26,6 @@ Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima
 
 ### Objetivo do Jogo:
 
-Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador. Cada vez que a bola ultrapassar a raquete adversária, você ganhará um ponto.
+Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
+
+### Fiz esse jogo com o intuito de impressionar um garota.
