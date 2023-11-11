@@ -17,7 +17,7 @@ let leftPositionBall = 400;
 let ballDirectionX = -1;
 let ballDirectionY = 0;
 let step = 20;
-let speedball = 5;
+let speedball = 4;
 let start = true;
 
 view.removeChild(player1);
@@ -135,7 +135,7 @@ function moverball() {
             ballDirectionX *= -1; 
         }
 
-        if (topPositionBall <= 0 || topPositionBall >= viewRect.height - ball.offsetHeight) {
+        if (topPositionBall <= 1 || topPositionBall >= viewRect.height - ball.offsetHeight) {
             ballDirectionY *= -1; 
         }
     }, 30);
@@ -152,13 +152,15 @@ function checkCollision() {
         ballRect.bottom >= player1Rect.top &&
         ballRect.top <= player1Rect.bottom
     ) {
-        if (ballRect.top < player1Rect.top + (player1Rect.height / 3)) {
+        if (ballRect.left < player1Rect.right + (player1Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
-        } else if (ballRect.bottom > player1Rect.bottom - (player1Rect.height / 3)) {
+        } 
+        else if (ballRect.left > player1Rect.right - (player1Rect.height / 3)) {
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
-        } else {
+        } 
+        else {
             ballDirectionY = 0;
             ballDirectionX *= -1; 
         }
@@ -172,16 +174,15 @@ function checkCollision() {
         ballRect.bottom >= player2Rect.top &&
         ballRect.top <= player2Rect.bottom
     ) {
-        if (ballRect.top < player2Rect.top + (player2Rect.height / 3)) {
+        if (ballRect.right < player2Rect.left + (player2Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
         } 
-        else if (ballRect.bottom > player2Rect.bottom - (player2Rect.height / 3)) {            
+        else if (ballRect.right > player2Rect.left - (player2Rect.height / 3)) {            
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
         } 
-        else {
-            
+        else {           
             ballDirectionY = 0;
             ballDirectionX *= -1; 
         }
@@ -191,7 +192,7 @@ function checkCollision() {
 }
 
 function speedsControl(){
-    if(speedball < 12){
+    if(speedball <= 9){
         speedball += 1;
     }
     else{
