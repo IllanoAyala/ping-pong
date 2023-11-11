@@ -16,15 +16,17 @@ Ou faça o download do repositório como um arquivo ZIP e extraia-o.
 
 Navegue até o diretório do jogo e abra o arquivo `index.html` em seu navegador web.
 
-### Controles do Jogador 1:
+### Controles:
+
+#### Jogador 1:
 
 Use as teclas `W` e `S` para mover a raquete para cima e para baixo, respectivamente.
 
-### Controles do Jogador 2:
+#### Jogador 2:
 
 Use as setas `Seta para cima` e `Seta para baixo` para mover a raquete para cima e para baixo, respectivamente.
 
-### Objetivo do Jogo:
+#### Objetivo do Jogo:
 
 Mantenha a bola em movimento e evite que ela ultrapasse as raquetes do jogador.
 
