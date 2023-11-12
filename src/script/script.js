@@ -5,10 +5,12 @@ const view = document.querySelector(".View");
 const viewRect = view.getBoundingClientRect();
 const player1Rect = player1.getBoundingClientRect();
 const player2Rect = player2.getBoundingClientRect();
-const startButton = document.querySelector("#startbutton");
-const restartButton = document.querySelector("#restartbutton")
+const startButton = document.getElementById("startbutton");
+const restartButton = document.getElementById("restartbutton")
 const player1Keys = {};
 const player2Keys = {};
+
+console.log(viewRect)
 
 let topPositonPlayer1 = 150;
 let leftPositionPlayer1 = 100;
@@ -18,8 +20,8 @@ let topPositionBall = 200;
 let leftPositionBall = 400;
 let ballDirectionX = -1;
 let ballDirectionY = 0;
-let step = 20;
-let speedball = 3;
+let step = 7;
+let speedball = 1;
 let start = true;
 
 view.removeChild(player1);
@@ -65,6 +67,8 @@ restartButton.addEventListener("click", () => {
     ball.style.left = leftPositionBall + "px";
 })
 
+let animationId;
+
 document.addEventListener("keydown", (event) => {
     if (!start) {
         if (event.key === "w") player1Keys.up = true;
@@ -73,7 +77,9 @@ document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowUp") player2Keys.up = true;
         if (event.key === "ArrowDown") player2Keys.down = true;
 
-        moverPlayers();
+        if (!animationId) {
+            animationId = requestAnimationFrame(moverPlayers);
+        }
     }
 });
 
@@ -84,54 +90,37 @@ document.addEventListener("keyup", (event) => {
 
         if (event.key === "ArrowUp") player2Keys.up = false;
         if (event.key === "ArrowDown") player2Keys.down = false;
-
-        moverPlayers();
     }
 });
 
 function moverPlayers() {
-    if (player1Keys.up) moverPlayer1(-step, 0);
-    if (player1Keys.down) moverPlayer1(step, 0);
+    if (player1Keys.up) moverPlayer1(-step);
+    if (player1Keys.down) moverPlayer1(step);
 
-    if (player2Keys.up) moverPlayer2(-step, 0);
-    if (player2Keys.down) moverPlayer2(step, 0);
+    if (player2Keys.up) moverPlayer2(-step);
+    if (player2Keys.down) moverPlayer2(step);
+
+    animationId = requestAnimationFrame(moverPlayers);
 }
 
-function moverPlayer1(topChange, leftChange) {
+function moverPlayer1(topChange) {
     const newTop = topPositonPlayer1 + topChange;
-    const newLeft = leftPositionPlayer1 + leftChange;
 
-    if (
-        newTop >= 0 &&
-        newLeft >= 0 &&
-        newTop + player1Rect.height <= viewRect.height &&
-        newLeft + player1Rect.width <= viewRect.width
-    ) {
+    if (newTop >= 0 && newTop + player1Rect.height <= viewRect.height) {
         topPositonPlayer1 = newTop;
-        leftPositionPlayer1 = newLeft;
-
         player1.style.top = topPositonPlayer1 + "px";
-        player1.style.left = leftPositionPlayer1 + "px";
     }
 }
 
-function moverPlayer2(topChange, leftChange) {
+function moverPlayer2(topChange) {
     const newTop = topPositonPlayer2 + topChange;
-    const newLeft = leftPositionPlayer2 + leftChange;
 
-    if (
-        newTop >= 0 &&
-        newLeft >= 0 &&
-        newTop + player2Rect.height <= viewRect.height &&
-        newLeft + player2Rect.width <= viewRect.width
-    ) {
+    if (newTop >= 0 && newTop + player2Rect.height <= viewRect.height) {
         topPositonPlayer2 = newTop;
-        leftPositionPlayer2 = newLeft;
-
         player2.style.top = topPositonPlayer2 + "px";
-        player2.style.left = leftPositionPlayer2 + "px";
     }
 }
+
 function moverball() {
     setInterval(function () {
 
@@ -143,13 +132,23 @@ function moverball() {
         checkCollision();
 
         if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
-            ballDirectionX *= -1; 
+            ballDirectionX *= -1;
+            
+            if (leftPositionBall <= 0)
+            {
+                console.log("1");
+            }
+            else if (leftPositionBall >= viewRect.width - ball.offsetWidth)
+            {
+                console.log("2"); //funtion gols
+            }
+            
         }
 
         if (topPositionBall <= 1 || topPositionBall >= viewRect.height - ball.offsetHeight) {
             ballDirectionY *= -1; 
         }
-    }, 25);
+    }, 5);
 }
 
 function checkCollision() {
@@ -170,13 +169,21 @@ function checkCollision() {
         else if (ballRect.left > player1Rect.right - (player1Rect.height / 3) || ballRect.left < player1Rect.right + (player1Rect.height / 3)) {
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
+        }
+        else if (ballRect.bottom > player1Rect.top) 
+        {
+            ballDirectionY *= 1;
+            ballDirectionX = 0; 
         } 
+        else if (ballRect.top > player1Rect.bottom) 
+        {
+            ballDirectionY *= 1;
+            ballDirectionX = 0; 
+        }
         else {
             ballDirectionY = 0;
             ballDirectionX *= -1; 
         }
-
-        speedsControl();
     }
 
     if (
@@ -192,24 +199,24 @@ function checkCollision() {
         else if (ballRect.right > player2Rect.left - (player2Rect.height / 3) || ballRect.right < player2Rect.left + (player2Rect.height / 3)) {            
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
+        }
+        else if (ballRect.bottom > player2Rect.top) 
+        {
+            ballDirectionY *= 1;
+            ballDirectionX = 0; 
         } 
+        else if (ballRect.top > player2Rect.bottom) 
+        {
+            ballDirectionY *= 1;
+            ballDirectionX = 0; 
+        }
         else {           
             ballDirectionY = 0;
             ballDirectionX *= -1; 
         }
-
-        speedsControl();
     }
 }
 
-function speedsControl(){
-    if(speedball <= 9){
-        speedball += 1;
-    }
-    else{
-        speedball -= 1;
-    }
-}
 function getRandomValueY() {
     return Math.random() * 2;
 }
