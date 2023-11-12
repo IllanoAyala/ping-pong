@@ -10,8 +10,7 @@ const restartButton = document.getElementById("restartbutton")
 const player1Keys = {};
 const player2Keys = {};
 
-console.log(viewRect)
-
+let animationId;
 let topPositonPlayer1 = 150;
 let leftPositionPlayer1 = 100;
 let topPositonPlayer2 = 150;
@@ -21,7 +20,7 @@ let leftPositionBall = 400;
 let ballDirectionX = -1;
 let ballDirectionY = 0;
 let step = 7;
-let speedball = 1;
+let speedball = 3;
 let start = true;
 
 view.removeChild(player1);
@@ -36,6 +35,7 @@ startButton.addEventListener("click", () => {
         view.appendChild(player1);
         view.appendChild(player2);
         view.appendChild(ball);
+
         startButton.textContent = "Stop";
         player1.style.top = topPositonPlayer1 + "px";
         player1.style.left = leftPositionPlayer1 + "px";
@@ -43,10 +43,23 @@ startButton.addEventListener("click", () => {
         player2.style.left = leftPositionPlayer2 + "px";
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";
+
         moverball();
+        
+        setInterval(function(){ //melhorar 
+            if(speedball <= 7)
+            {
+                speedball += 1;
+                // transitionColor();
+            }
+            else{
+                
+            }
+        }, 3000);
+
     }
     else{
-        startButton.textContent = "Start";
+        location.reload();
     }
 });
 
@@ -63,11 +76,12 @@ restartButton.addEventListener("click", () => {
 
     topPositionBall = 200;
     leftPositionBall = 400;
+    speedball = 3;
+    ballDirectionX = -1;
+    ballDirectionY = 0;
     ball.style.top = topPositionBall + "px";
     ball.style.left = leftPositionBall + "px";
 })
-
-let animationId;
 
 document.addEventListener("keydown", (event) => {
     if (!start) {
@@ -122,8 +136,7 @@ function moverPlayer2(topChange) {
 }
 
 function moverball() {
-    setInterval(function () {
-
+    function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
         ball.style.left = leftPositionBall + "px";
@@ -133,22 +146,22 @@ function moverball() {
 
         if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
             ballDirectionX *= -1;
-            
-            if (leftPositionBall <= 0)
-            {
+
+            if (leftPositionBall <= 0) {
                 console.log("1");
+            } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
+                console.log("2"); // function gols
             }
-            else if (leftPositionBall >= viewRect.width - ball.offsetWidth)
-            {
-                console.log("2"); //funtion gols
-            }
-            
         }
 
         if (topPositionBall <= 1 || topPositionBall >= viewRect.height - ball.offsetHeight) {
-            ballDirectionY *= -1; 
+            ballDirectionY *= -1;
         }
-    }, 5);
+
+        requestAnimationFrame(animate);
+    }
+
+    requestAnimationFrame(animate);
 }
 
 function checkCollision() {
@@ -220,3 +233,21 @@ function checkCollision() {
 function getRandomValueY() {
     return Math.random() * 2;
 }
+
+function randomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+      color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}
+
+function colorChange() {
+    document.body.style.backgroundColor = randomColor();
+    view.style.backgroundColor = randomColor();
+    player1.style.backgroundColor = randomColor();
+    player2.style.backgroundColor = player1.style.backgroundColor;
+}
+
+setInterval(colorChange, 5000);
