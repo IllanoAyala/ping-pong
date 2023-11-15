@@ -238,7 +238,7 @@ function getColor() {
 }
 
 function randomColor(baseColor) {
-    const variation = 62; // Ajuste conforme necessário
+    const variation = 72; 
 
     const offset = () => Math.floor(Math.random() * (2 * variation + 1)) - variation;
     const clamp = (value) => Math.min(255, Math.max(0, value));
@@ -255,17 +255,15 @@ function randomColor(baseColor) {
     const newColor = `#${toHex(newRed)}${toHex(newGreen)}${toHex(newBlue)}`;
 
     const luminance = (0.299 * newRed + 0.587 * newGreen + 0.114 * newBlue) / 255;
-    const textColor = luminance > 0.5 ? '#000000' : '#ffffff';
+    const color = luminance > 0.5 ? '#000000' : '#ffffff';
 
-    // Aplica a nova cor de fundo e a cor do texto
-    document.body.style.backgroundColor = newColor;
-    ball.style.backgroundColor = textColor;
+    ball.style.backgroundColor = color;
 
     return newColor;
 }
 
 function colorChange() {
-    const baseColor = getColor(); // Cor base, substitua pela cor desejada
+    const baseColor = getColor(); 
 
     document.body.style.backgroundColor = randomColor(baseColor);
     view.style.backgroundColor = randomColor(baseColor);
