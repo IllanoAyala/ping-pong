@@ -6,7 +6,18 @@ body{
 
 #containerElements{
     display: flex;
-    margin-top: 50px;
+    margin-top: 20px;
+    flex-direction: row;
+}
+
+#containerPlacar{
+    display: flex;
+    margin-top: 10px;
+    background-color: #000000;
+    align-items: center;
+    justify-content: center;
+    align-self: center;
+    border-radius: 20px;
     flex-direction: row;
 }
 
@@ -39,25 +50,38 @@ body{
     font-family: 'Arial', sans-serif;
     text-align: center;
     font-size: 14px;
-    color: #555;
+    color: #000000;
     margin-top: 20px;
     padding: 10px;
     border-top: 1px solid #ddd;
 }
 
-#scoreP1{
+#score{
+    font-family: 'Arial', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #3498db;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
     margin: 20px;
-    display: flex;
-    background-color: #000000;
-    width: 10px;
-    height: 400px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
-#scoreP2{
+
+#score.highlight {
+    background-color: #e74c3c; /* Cor diferente para destacar */
+    color: #ffffff;
+    transition: background-color 0.3s ease-in-out;
+}
+
+
+#bars{
     margin: 20px;
     display: flex;
     background-color: #000000;
     width: 10px;
-    height: 400px;
+    
 }
 
 #player1 {
@@ -103,10 +127,8 @@ body{
     padding: 10px 20px;
     background-color: #000000; 
     color: #fff; 
-    border: none;
     border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease; 
+    border: none;
 }
 
 #startbutton:hover{
