@@ -47,7 +47,7 @@ startButton.addEventListener("click", () => {
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";
 
-        moverball();
+        moveball();
         
         setInterval(function(){ //melhorar 
             if(speedball <= 7)
@@ -143,7 +143,7 @@ function movePlayer2(topChange) {
     }
 }
 
-function moverball() {
+function moveball() {
     function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
@@ -185,17 +185,17 @@ function checkCollision() {
         ballRect.bottom >= player1Rect.top &&
         ballRect.top <= player1Rect.bottom
     ) {
-        if (ballRect.left < player1Rect.right + (player1Rect.height / 3) || ballRect.right < player1Rect.left + (player1Rect.height / 3)) {
+        if (ballRect.top < player1Rect.top + (player1Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
-        } 
-        else if (ballRect.left > player1Rect.right - (player1Rect.height / 3) || ballRect.left < player1Rect.right + (player1Rect.height / 3)) {
+        }       
+        else if (ballRect.bottom > player1Rect.bottom - (player1Rect.height / 3)) {
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
         }
         else {
             ballDirectionY = 0;
-            ballDirectionX *= -1; 
+            ballDirectionX *= -1;
         }
 
         colorChange();
@@ -207,11 +207,11 @@ function checkCollision() {
         ballRect.bottom >= player2Rect.top &&
         ballRect.top <= player2Rect.bottom
     ) {
-        if (ballRect.right < player2Rect.left + (player2Rect.height / 3) || ballRect.left < player2Rect.right + (player2Rect.height / 3)) {
+        if (ballRect.top < player2Rect.top + (player2Rect.height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
         } 
-        else if (ballRect.right > player2Rect.left - (player2Rect.height / 3) || ballRect.right < player2Rect.left + (player2Rect.height / 3)) {            
+        else if (ballRect.bottom > player2Rect.bottom - (player2Rect.height / 3)) {            
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
         }
@@ -317,12 +317,11 @@ function counterGoals(player){
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";    
     }
-    else{
+    else{ //atualizar placar
         scores[0].textContent = golsP2;
         scores[1].textContent = golsP1;
     }
 
-    
 }
 // setInterval(colorChange, 5000);
 // clearInterval(colorChange);
