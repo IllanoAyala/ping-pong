@@ -6,6 +6,7 @@ body{
 
 #containerElements{
     display: flex;
+    width: 1100px;
     margin-top: 20px;
     flex-direction: row;
 }
@@ -28,10 +29,16 @@ body{
     align-items: center;
 }
 
+
+/* #containerView{
+    width: 90%;
+} */
+
 .View {
     display: flex;
     background-color: #3498db; 
-    width: 900px;
+    /* width: 900px; */
+    width: 90%;
     height: 400px;
     margin: 20px; 
     border-radius: 10px; 
@@ -61,18 +68,11 @@ body{
     font-size: 24px;
     font-weight: bold;
     color: #ffffff;
-    background-color: #3498db;
+    background-color: #000000;
     padding: 15px;
-    border-radius: 5px;
     text-align: center;
     margin: 20px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-#score.highlight {
-    background-color: #e74c3c; /* Cor diferente para destacar */
-    color: #ffffff;
-    transition: background-color 0.3s ease-in-out;
 }
 
 
@@ -90,6 +90,7 @@ body{
     background-color: #333; 
     position: absolute; 
 }
+
 #player2 {
     width: 10px;
     height: 150px;
@@ -114,7 +115,7 @@ body{
     font-size: 56px;
     font-weight: bold;
     padding: 10px 20px;
-    background-color: #2c3e50; 
+    background-color:  #000000; 
     color: #fff; 
     border: none;
     border-radius: 5px;
@@ -150,4 +151,30 @@ button:hover {
 
 button:active {
     background-color: #000000; 
+}
+
+@keyframes scaleUp {
+    from {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.5); 
+    }
+}
+
+.scale-up {
+    animation: scaleUp 0.7s ease-in-out alternate;
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.rotate {
+    animation: rotate 2s linear infinite;
 }

@@ -2,6 +2,7 @@ const player1 = document.getElementById("player1");
 const player2 = document.getElementById("player2");
 const ball = document.getElementById("ball");
 const view = document.querySelector(".View");
+var gametitle = document.getElementById("gametitle");
 const viewRect = view.getBoundingClientRect();
 const player1Rect = player1.getBoundingClientRect();
 const player2Rect = player2.getBoundingClientRect();
@@ -10,17 +11,18 @@ const restartButton = document.getElementById("restartbutton")
 const player1Keys = {};
 const player2Keys = {};
 
-let animationId;
+let movePlayersAnimation;
+let moveBallAnimation;
 let topPositonPlayer1 = 150;
-let leftPositionPlayer1 = 100;
+let leftPositionPlayer1 = 10;
 let topPositonPlayer2 = 150;
-let leftPositionPlayer2 = 780;
+let leftPositionPlayer2 = 90;
 let topPositionBall = 200;
 let leftPositionBall = 400;
 let ballDirectionX = Math.random() < 0.5 ? 1 : -1;
 let ballDirectionY = 0;
 let step = 7;
-let speedball = 3;
+let speedball = 4;
 let start = true;
 let golsP1 = 0;
 let golsP2 = 0;
@@ -41,23 +43,14 @@ startButton.addEventListener("click", () => {
 
         startButton.textContent = "Stop";
         player1.style.top = topPositonPlayer1 + "px";
-        player1.style.left = leftPositionPlayer1 + "px";
+        player1.style.left = leftPositionPlayer1 + "%";
         player2.style.top = topPositonPlayer2 + "px";
-        player2.style.left = leftPositionPlayer2 + "px";
+        player2.style.left = leftPositionPlayer2 + "%";
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";
 
         moveball();
         
-        setInterval(function(){ //melhorar 
-            if(speedball <= 7)
-            {
-                speedball += 1;
-            }
-            else{
-                
-            }
-        }, 3000);
     }
     else{
         location.reload();
@@ -66,18 +59,18 @@ startButton.addEventListener("click", () => {
 
 function restart(inicialDiretionX){
     topPositonPlayer1 = 150;
-    leftPositionPlayer1 = 100;
+    leftPositionPlayer1 = 10;
     player1.style.top = 150 + "px";
-    player1.style.left = 100 + "px";
+    player1.style.left = 10 + "%";
     
     topPositonPlayer2 = 150;
-    leftPositionPlayer2 = 780;
+    leftPositionPlayer2 = 90;
     player2.style.top = 150 + "px";
-    player2.style.left = 780 + "px";
+    player2.style.left = 90 + "%";
 
     topPositionBall = 200;
     leftPositionBall = 400;
-    speedball = 3;
+    speedball = 4;
     ballDirectionX = inicialDiretionX;
     ballDirectionY = 0;
     golsP1 = 0;
@@ -99,8 +92,8 @@ document.addEventListener("keydown", (event) => {
         if (event.key === "ArrowUp") player2Keys.up = true;
         if (event.key === "ArrowDown") player2Keys.down = true;
 
-        if (!animationId) {
-            animationId = requestAnimationFrame(moverPlayers);
+        if (!movePlayersAnimation) {
+            movePlayersAnimation = requestAnimationFrame(moverPlayers);
         }
     }
 });
@@ -122,7 +115,7 @@ function moverPlayers() {
     if (player2Keys.up) movePlayer2(-step);
     if (player2Keys.down) movePlayer2(step);
 
-    animationId = requestAnimationFrame(moverPlayers);
+    movePlayersAnimation = requestAnimationFrame(moverPlayers);
 }
 
 function movePlayer1(topChange) {
@@ -144,6 +137,7 @@ function movePlayer2(topChange) {
 }
 
 function moveball() {
+    ball.classList.add("rotate");
     function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
@@ -168,13 +162,29 @@ function moveball() {
             ballDirectionY *= -1;
         }
 
-        requestAnimationFrame(animate);
+        moveBallAnimation = requestAnimationFrame(animate);
     }
 
-    requestAnimationFrame(animate);
+    setInterval(function(){
+        if(speedball != 0)
+        {
+            if(speedball <= 10)
+            {
+                speedball += 0.3;
+                // var speedanimation = parseFloat(ball.classList.style.animationDuration) - 0.5;
+                // ball.style.animationDuration = speedanimation + "s";
+                // ball.classList.style.animationDuration = speedanimation + "s";
+            }
+        }
+    }, 2000)
+
+
+    
+
+    moveBallAnimation = requestAnimationFrame(animate);
 }
 
-function checkCollision() {
+function checkCollision() { // atualizar colisões para interserção entre objetos??
     const ballRect = ball.getBoundingClientRect();
     const player1Rect = player1.getBoundingClientRect();
     const player2Rect = player2.getBoundingClientRect();
@@ -217,7 +227,7 @@ function checkCollision() {
         }
         else {           
             ballDirectionY = 0;
-            ballDirectionX *= -1; 
+            ballDirectionX *= -1;            
         }
 
         colorChange();
@@ -225,7 +235,7 @@ function checkCollision() {
 }
 
 function getRandomValueY() {
-    return Math.random() * 2;
+    return Math.random() * 3;
 }
 
 function getColor() {
@@ -265,7 +275,7 @@ function randomColor(baseColor) {
 function colorChange() {
     const baseColor = getColor(); 
 
-    document.body.style.backgroundColor = randomColor(baseColor);
+    // document.body.style.backgroundColor = `linear-gradient(to bottom, white, ${randomColor(baseColor)})`;
     view.style.backgroundColor = randomColor(baseColor);
     player1.style.backgroundColor = randomColor(baseColor);
     player2.style.backgroundColor = player1.style.backgroundColor;
@@ -281,20 +291,22 @@ function counterGoals(player){
         topPositonPlayer1 = 150;
         leftPositionPlayer1 = 100;
         player1.style.top = 150 + "px";
-        player1.style.left = 100 + "px";
+        player1.style.left = 10 + "%";
         
         topPositonPlayer2 = 150;
-        leftPositionPlayer2 = 780;
+        leftPositionPlayer2 = 90;
         player2.style.top = 150 + "px";
-        player2.style.left = 780 + "px";
+        player2.style.left = 90 + "%";
 
         topPositionBall = 200;
         leftPositionBall = 400;
-        speedball = 3;
+        speedball = 0;
         ballDirectionX = -1;
         ballDirectionY = 0;
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";
+        view.removeChild(ball);
+        startCounter();
     }
     else if(player === player2){
         golsP2 += 1;
@@ -302,20 +314,22 @@ function counterGoals(player){
         topPositonPlayer1 = 150;
         leftPositionPlayer1 = 100;
         player1.style.top = 150 + "px";
-        player1.style.left = 100 + "px";
+        player1.style.left = 10 + "%";
         
         topPositonPlayer2 = 150;
         leftPositionPlayer2 = 780;
         player2.style.top = 150 + "px";
-        player2.style.left = 780 + "px";
+        player2.style.left = 90 + "%";
 
         topPositionBall = 200;
         leftPositionBall = 400;
-        speedball = 3;
+        speedball = 0;
         ballDirectionX = 1;
         ballDirectionY = 0;
         ball.style.top = topPositionBall + "px";
-        ball.style.left = leftPositionBall + "px";    
+        ball.style.left = leftPositionBall + "px"; 
+        view.removeChild(ball);
+        startCounter();
     }
     else{ //atualizar placar
         scores[0].textContent = golsP2;
@@ -323,5 +337,28 @@ function counterGoals(player){
     }
 
 }
+
+function startCounter() {
+    var counter = 3;
+    
+    counterInterval = setInterval(function () {
+        if (counter > 0) {
+            gametitle.textContent = counter;
+            counter--;
+        } else {
+            clearInterval(counterInterval);
+            gametitle.textContent = "GO!";
+            gametitle.classList.add("scale-up");
+            setTimeout(function () {
+                gametitle.textContent = "";
+                gametitle.classList.remove("scale-up");
+                view.appendChild(ball);
+                speedball = 4;
+            }, 1000);
+        }
+    }, 1000);   
+}
+
+
 // setInterval(colorChange, 5000);
 // clearInterval(colorChange);
