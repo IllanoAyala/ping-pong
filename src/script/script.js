@@ -57,7 +57,7 @@ startButton.addEventListener("click", () => {
     }
 });
 
-function restart(inicialDiretionX){
+function restart(inicialDiretionX){ //
     topPositonPlayer1 = 150;
     leftPositionPlayer1 = 10;
     player1.style.top = 150 + "px";
@@ -138,7 +138,7 @@ function movePlayer2(topChange) {
 }
 
 function moveball() {
-    // ball.classList.add("rotate");
+    // ball.classList.add("rotate"); //criar elemento div para colocar o rotate
     function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
@@ -179,56 +179,45 @@ function moveball() {
         }
     }, 2000)
 
-
-    
-
     moveBallAnimation = requestAnimationFrame(animate);
 }
 
-function checkCollision() { // atualizar colisões para interserção entre objetos??
+function checkCollision() {
     const ballRect = ball.getBoundingClientRect();
-    const player1Rect = player1.getBoundingClientRect();
-    const player2Rect = player2.getBoundingClientRect();
 
-    if (
-        ballRect.right >= player1Rect.left &&
-        ballRect.left <= player1Rect.right &&
-        ballRect.bottom >= player1Rect.top &&
-        ballRect.top <= player1Rect.bottom
-    ) {
-        if (ballRect.top < player1Rect.top + (player1Rect.height / 3)) {
-            ballDirectionY = getRandomValueY();
-            ballDirectionX *= -1;
-        }       
-        else if (ballRect.bottom > player1Rect.bottom - (player1Rect.height / 3)) {
-            ballDirectionY = -1 * getRandomValueY();
-            ballDirectionX *= -1;
-        }
-        else {
-            ballDirectionY = 0;
-            ballDirectionX *= -1;
-        }
+    const observerPlayer1 = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
+    observerPlayer1.observe(player1);
 
-        colorChange();
+    const observerPlayer2 = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
+    observerPlayer2.observe(player2);
+
+    function handleIntersection(entries) {
+        entries.forEach(entry => {
+            const playerRect = entry.target.getBoundingClientRect();
+
+            if (entry.isIntersecting) {
+                if (
+                    ballRect.right >= playerRect.left &&
+                    ballRect.left <= playerRect.right &&
+                    ballRect.bottom >= playerRect.top &&
+                    ballRect.top <= playerRect.bottom
+                ) {
+                    handleCollision(entry.target);
+                }
+            }
+        });
     }
 
-    if (
-        ballRect.right >= player2Rect.left &&
-        ballRect.left <= player2Rect.right &&
-        ballRect.bottom >= player2Rect.top &&
-        ballRect.top <= player2Rect.bottom
-    ) {
-        if (ballRect.top < player2Rect.top + (player2Rect.height / 3)) {
+    function handleCollision(player) {
+        if (ballRect.top < player.getBoundingClientRect().top + (player.getBoundingClientRect().height / 3)) {
             ballDirectionY = getRandomValueY();
             ballDirectionX *= -1;
-        } 
-        else if (ballRect.bottom > player2Rect.bottom - (player2Rect.height / 3)) {            
+        } else if (ballRect.bottom > player.getBoundingClientRect().bottom - (player.getBoundingClientRect().height / 3)) {
             ballDirectionY = -1 * getRandomValueY();
             ballDirectionX *= -1;
-        }
-        else {           
+        } else {
             ballDirectionY = 0;
-            ballDirectionX *= -1;            
+            ballDirectionX *= -1;
         }
 
         colorChange();
