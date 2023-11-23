@@ -70,7 +70,7 @@ function restart(inicialDiretionX){
 
     topPositionBall = 200;
     leftPositionBall = 400;
-    speedball = 4;
+    speedball = 0;
     ballDirectionX = inicialDiretionX;
     ballDirectionY = 0;
     golsP1 = 0;
@@ -78,6 +78,7 @@ function restart(inicialDiretionX){
     ball.style.top = topPositionBall + "px";
     ball.style.left = leftPositionBall + "px";
     counterGoals();
+    startCounter();
 }
 
 restartButton.addEventListener("click", () => {
@@ -137,7 +138,7 @@ function movePlayer2(topChange) {
 }
 
 function moveball() {
-    ball.classList.add("rotate");
+    // ball.classList.add("rotate");
     function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
@@ -305,7 +306,6 @@ function counterGoals(player){
         ballDirectionY = 0;
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px";
-        view.removeChild(ball);
         startCounter();
     }
     else if(player === player2){
@@ -328,7 +328,6 @@ function counterGoals(player){
         ballDirectionY = 0;
         ball.style.top = topPositionBall + "px";
         ball.style.left = leftPositionBall + "px"; 
-        view.removeChild(ball);
         startCounter();
     }
     else{ //atualizar placar
@@ -340,6 +339,7 @@ function counterGoals(player){
 
 function startCounter() {
     var counter = 3;
+    view.removeChild(ball);
     
     counterInterval = setInterval(function () {
         if (counter > 0) {
