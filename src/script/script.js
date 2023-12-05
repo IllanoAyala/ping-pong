@@ -7,6 +7,8 @@ const viewRect = view.getBoundingClientRect();
 const player1Rect = player1.getBoundingClientRect();
 const player2Rect = player2.getBoundingClientRect();
 const startButton = document.getElementById("startbutton");
+const modeGame = document.getElementById("modeGameButton");
+const scores = document.querySelectorAll("#score");
 const restartButton = document.getElementById("restartbutton")
 const player1Keys = {};
 const player2Keys = {};
@@ -24,6 +26,7 @@ let ballDirectionY = 0;
 let step = 7;
 let speedball = 4;
 let start = true;
+let mode = true;
 let golsP1 = 0;
 let golsP2 = 0;
 
@@ -37,19 +40,35 @@ const keys = {};
 startButton.addEventListener("click", () => {
     start = !start;
     if (!start) {
-        view.appendChild(player1);
-        view.appendChild(player2);
-        view.appendChild(ball);
+        if(!mode){
+            view.appendChild(player1);
+            view.appendChild(ball);
 
-        startButton.textContent = "Stop";
-        player1.style.top = topPositonPlayer1 + "px";
-        player1.style.left = leftPositionPlayer1 + "%";
-        player2.style.top = topPositonPlayer2 + "px";
-        player2.style.left = leftPositionPlayer2 + "%";
-        ball.style.top = topPositionBall + "px";
-        ball.style.left = leftPositionBall + "px";
+            startButton.textContent = "Stop";
+            player1.style.top = topPositonPlayer1 + "px";
+            player1.style.left = leftPositionPlayer1 + "%";
+            ball.style.top = topPositionBall + "px";
+            ball.style.left = leftPositionBall + "px";
 
-        moveball();
+            moveball();
+        }
+        else{
+            view.appendChild(player1);
+            view.appendChild(player2);
+            view.appendChild(ball);
+
+            startButton.textContent = "Stop";
+            player1.style.top = topPositonPlayer1 + "px";
+            player1.style.left = leftPositionPlayer1 + "%";
+            player2.style.top = topPositonPlayer2 + "px";
+            player2.style.left = leftPositionPlayer2 + "%";
+            ball.style.top = topPositionBall + "px";
+            ball.style.left = leftPositionBall + "px";
+
+            moveball();
+        }
+
+        
         
     }
     else{
@@ -57,7 +76,65 @@ startButton.addEventListener("click", () => {
     }
 });
 
-function restart(inicialDiretionX){ //
+function changeMode(){
+    mode = !mode;
+
+    if(!mode){
+        document.getElementById("mode").src = "src/styles/2p.svg"
+
+        if(!start){
+            restart(ballDirectionX)
+            view.removeChild(player2);
+            var counter = 1;
+            view.removeChild(ball);
+        
+            counterInterval = setInterval(function () {
+                if (counter > 0) {
+                    gametitle.textContent = "1P";
+                    counter--;
+                } else {
+                    clearInterval(counterInterval);
+                    setTimeout(function () {
+                        gametitle.textContent = "";
+                        view.appendChild(ball);
+                        speedball = 4;
+                    }, 1000);
+                }
+            }, 1000);
+        }
+        
+    }
+    else{
+        document.getElementById("mode").src = "src/styles/1p.svg"
+
+        if(!start){
+            restart(ballDirectionX)
+            view.appendChild(player2)
+            var counter = 1;
+            view.removeChild(ball);
+        
+            counterInterval = setInterval(function () {
+                if (counter > 0) {
+                    gametitle.textContent = "2P";
+                    counter--;
+                } else {
+                    clearInterval(counterInterval);
+                    setTimeout(function () {
+                        gametitle.textContent = "";
+                        view.appendChild(ball);
+                        speedball = 4;
+                    }, 1000);
+                }
+            }, 1000);    
+        }
+    }
+}
+
+modeGame.addEventListener("click", () => {
+    changeMode();
+})
+
+function restart(inicialDiretionX, number){ //
     topPositonPlayer1 = 150;
     leftPositionPlayer1 = 10;
     player1.style.top = 150 + "px";
@@ -78,11 +155,14 @@ function restart(inicialDiretionX){ //
     ball.style.top = topPositionBall + "px";
     ball.style.left = leftPositionBall + "px";
     counterGoals();
-    startCounter();
+    if(number == 1){
+        startCounter();
+    }
+    
 }
 
 restartButton.addEventListener("click", () => {
-    restart(ballDirectionX);
+    restart(ballDirectionX, 1);
 })
 
 document.addEventListener("keydown", (event) => {
@@ -148,13 +228,24 @@ function moveball() {
         if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
             ballDirectionX *= -1;
 
-            if (leftPositionBall <= 0) {
-                console.log("1"); // function gols
-                counterGoals(player1);
-            } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
-                console.log("2"); // function gols
-                counterGoals(player2);
+            if(mode){
+                if (leftPositionBall <= 0) {
+                    console.log("1"); // function gols
+                    counterGoals(player1);
+                } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
+                    console.log("2"); // function gols
+                    counterGoals(player2);
+                }
             }
+            else{
+                if (leftPositionBall <= 0) {
+                    console.log("3"); // function gols
+                    counterGoals(player1);
+                } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
+                    console.log("2"); // function gols
+                }
+            }
+            
         }
 
         else if (topPositionBall <= 2 || topPositionBall >= viewRect.height - ball.offsetHeight + 2) {
@@ -186,30 +277,41 @@ function checkCollision() {
     const player1Rect = player1.getBoundingClientRect();
     const player2Rect = player2.getBoundingClientRect();
 
-    if (
-        ballRect.right >= player1Rect.left &&
-        ballRect.left <= player1Rect.right &&
-        ballRect.bottom >= player1Rect.top &&
-        ballRect.top <= player1Rect.bottom
-    ) {
-        collisionPlayer(player1Rect);
+    if(mode){
+        if (
+            ballRect.right >= player1Rect.left &&
+            ballRect.left <= player1Rect.right &&
+            ballRect.bottom >= player1Rect.top &&
+            ballRect.top <= player1Rect.bottom
+        ) {
+            collisionPlayer(player1Rect);
+        }
+        if (
+            ballRect.right >= player2Rect.left &&
+            ballRect.left <= player2Rect.right &&
+            ballRect.bottom >= player2Rect.top &&
+            ballRect.top <= player2Rect.bottom
+        ) {
+            collisionPlayer(player2Rect);
+        }
     }
-    if (
-        ballRect.right >= player2Rect.left &&
-        ballRect.left <= player2Rect.right &&
-        ballRect.bottom >= player2Rect.top &&
-        ballRect.top <= player2Rect.bottom
-    ) {
-        collisionPlayer(player2Rect);
+    else{
+        if (
+            ballRect.right >= player1Rect.left &&
+            ballRect.left <= player1Rect.right &&
+            ballRect.bottom >= player1Rect.top &&
+            ballRect.top <= player1Rect.bottom
+        ) {
+            collisionPlayer(player1Rect);
+        }
     }
-
     function collisionPlayer(playerRect){
         const ballCenterY = (ballRect.top + ballRect.bottom) / 2;
         const playerCenterY = (playerRect.top + playerRect.bottom) / 2;
         const ballPositionX = (ballRect.left + ballRect.right) / 2;
         const playerPositionX = (playerRect.left + playerRect.right) / 2;
 
-        ballDirectionY = ballCenterY < playerCenterY ? -1 * getRandomValueY() : getRandomValueY();
+        ballDirectionY = ballCenterY < playerCenterY ? getRandomValueY() : -1 * getRandomValueY();
         ballDirectionX = ballPositionX < playerPositionX ? -1 : 1;
 
         colorChange();
@@ -265,7 +367,6 @@ function colorChange() {
 }
 
 function counterGoals(player){ //melhorar
-    var scores = document.querySelectorAll("#score");
 
     if(player === player1)
     {

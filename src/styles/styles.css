@@ -37,8 +37,8 @@ body{
 .View {
     display: flex;
     background-color: #3498db; 
-    /* width: 900px; */
-    width: 90%;
+    width: 950px;
+    /* width: 90%; */
     height: 400px;
     margin: 20px; 
     border-radius: 10px; 
@@ -133,7 +133,7 @@ body{
 }
 
 #startbutton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
 }
 
 #restartbutton {
@@ -142,7 +142,10 @@ body{
 }
 
 #restartbutton:hover{
-    transform: scale(1.2);
+    transform: scale(1.1);
+}
+#modeGameButton:hover{
+    transform: scale(1.1);
 }
 
 button:hover {
@@ -151,6 +154,17 @@ button:hover {
 
 button:active {
     background-color: #000000; 
+}
+
+#modeGameButton {
+    font-family: 'Arial', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    background-color: #000000; 
+    color: #fff; 
+    border-radius: 5px;
+    border: none;
+    margin-left: 4px;
 }
 
 @keyframes scaleUp {
