@@ -138,14 +138,12 @@ function movePlayer2(topChange) {
 }
 
 function moveball() {
-    // ball.classList.add("rotate"); //criar elemento div para colocar o rotate
+    ball.classList.add("rotate"); //criar elemento div para colocar o rotate
     function animate() {
         leftPositionBall += speedball * ballDirectionX;
         topPositionBall += speedball * ballDirectionY;
         ball.style.left = leftPositionBall + "px";
         ball.style.top = topPositionBall + "px";
-
-        checkCollision();
 
         if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
             ballDirectionX *= -1;
@@ -159,8 +157,12 @@ function moveball() {
             }
         }
 
-        if (topPositionBall <= 2 || topPositionBall >= viewRect.height - ball.offsetHeight + 2) {
+        else if (topPositionBall <= 2 || topPositionBall >= viewRect.height - ball.offsetHeight + 2) {
             ballDirectionY *= -1;
+        }
+
+        else{
+            checkCollision();
         }
 
         moveBallAnimation = requestAnimationFrame(animate);
@@ -171,10 +173,7 @@ function moveball() {
         {
             if(speedball <= 10)
             {
-                speedball += 0.3;
-                // var speedanimation = parseFloat(ball.classList.style.animationDuration) - 0.5;
-                // ball.style.animationDuration = speedanimation + "s";
-                // ball.classList.style.animationDuration = speedanimation + "s";
+                speedball += 0.5;
             }
         }
     }, 2000)
@@ -182,50 +181,44 @@ function moveball() {
     moveBallAnimation = requestAnimationFrame(animate);
 }
 
-function checkCollision() {
+function checkCollision() { 
     const ballRect = ball.getBoundingClientRect();
+    const player1Rect = player1.getBoundingClientRect();
+    const player2Rect = player2.getBoundingClientRect();
 
-    const observerPlayer1 = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
-    observerPlayer1.observe(player1);
-
-    const observerPlayer2 = new IntersectionObserver(handleIntersection, { threshold: 0.1 });
-    observerPlayer2.observe(player2);
-
-    function handleIntersection(entries) {
-        entries.forEach(entry => {
-            const playerRect = entry.target.getBoundingClientRect();
-
-            if (entry.isIntersecting) {
-                if (
-                    ballRect.right >= playerRect.left &&
-                    ballRect.left <= playerRect.right &&
-                    ballRect.bottom >= playerRect.top &&
-                    ballRect.top <= playerRect.bottom
-                ) {
-                    handleCollision(entry.target);
-                }
-            }
-        });
+    if (
+        ballRect.right >= player1Rect.left &&
+        ballRect.left <= player1Rect.right &&
+        ballRect.bottom >= player1Rect.top &&
+        ballRect.top <= player1Rect.bottom
+    ) {
+        collisionPlayer(player1Rect);
+    }
+    if (
+        ballRect.right >= player2Rect.left &&
+        ballRect.left <= player2Rect.right &&
+        ballRect.bottom >= player2Rect.top &&
+        ballRect.top <= player2Rect.bottom
+    ) {
+        collisionPlayer(player2Rect);
     }
 
-    function handleCollision(player) {
-        if (ballRect.top < player.getBoundingClientRect().top + (player.getBoundingClientRect().height / 3)) {
-            ballDirectionY = getRandomValueY();
-            ballDirectionX *= -1;
-        } else if (ballRect.bottom > player.getBoundingClientRect().bottom - (player.getBoundingClientRect().height / 3)) {
-            ballDirectionY = -1 * getRandomValueY();
-            ballDirectionX *= -1;
-        } else {
-            ballDirectionY = 0;
-            ballDirectionX *= -1;
-        }
+    function collisionPlayer(playerRect){
+        const ballCenterY = (ballRect.top + ballRect.bottom) / 2;
+        const playerCenterY = (playerRect.top + playerRect.bottom) / 2;
+        const ballPositionX = (ballRect.left + ballRect.right) / 2;
+        const playerPositionX = (playerRect.left + playerRect.right) / 2;
+
+        ballDirectionY = ballCenterY < playerCenterY ? -1 * getRandomValueY() : getRandomValueY();
+        ballDirectionX = ballPositionX < playerPositionX ? -1 : 1;
 
         colorChange();
     }
 }
 
+
 function getRandomValueY() {
-    return Math.random() * 3;
+    return Math.random() * 2;
 }
 
 function getColor() {
@@ -263,7 +256,7 @@ function randomColor(baseColor) {
 }
 
 function colorChange() {
-    const baseColor = getColor(); 
+    const baseColor = getColor();
 
     // document.body.style.backgroundColor = `linear-gradient(to bottom, white, ${randomColor(baseColor)})`;
     view.style.backgroundColor = randomColor(baseColor);
@@ -271,7 +264,7 @@ function colorChange() {
     player2.style.backgroundColor = player1.style.backgroundColor;
 }
 
-function counterGoals(player){
+function counterGoals(player){ //melhorar
     var scores = document.querySelectorAll("#score");
 
     if(player === player1)
@@ -348,6 +341,3 @@ function startCounter() {
     }, 1000);   
 }
 
-
-// setInterval(colorChange, 5000);
-// clearInterval(colorChange);

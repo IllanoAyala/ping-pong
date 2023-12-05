@@ -1,0 +1,43 @@
+// function checkCollision() {
+//     const ballRect = ball.getBoundingClientRect();
+//     //colisão div centro ball
+
+//     const observerPlayer1 = new IntersectionObserver(handleIntersection, { threshold: 1 });
+//     observerPlayer1.observe(player1);
+
+//     const observerPlayer2 = new IntersectionObserver(handleIntersection, { threshold: 1 });
+//     observerPlayer2.observe(player2);
+
+//     function handleIntersection(entries) {
+//         entries.forEach(entry => {
+//             const playerRect = entry.target.getBoundingClientRect();
+
+//             if (entry.isIntersecting) {
+//                 if (
+//                     ballRect.right >= playerRect.left &&
+//                     ballRect.left <= playerRect.right &&
+//                     ballRect.bottom >= playerRect.top &&
+//                     ballRect.top <= playerRect.bottom
+//                 ) {
+//                     handleCollision(entry.target);
+//                 }
+//             }
+//         });
+//     }
+
+//     function handleCollision(player) {
+//         if (ballRect.top < player.getBoundingClientRect().top + (player.getBoundingClientRect().height / 3)) {
+//             ballDirectionY = getRandomValueY();
+//             ballDirectionX *= -1;
+//         } else if (ballRect.bottom > player.getBoundingClientRect().bottom - (player.getBoundingClientRect().height / 3)) {
+//             ballDirectionY = -1 * getRandomValueY();
+//             ballDirectionX *= -1;
+//         } else {
+//             ballDirectionY = 0;
+//             ballDirectionX *= -1;
+
+//         }
+        
+//         colorChange();
+//     }
+// }
