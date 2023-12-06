@@ -67,9 +67,6 @@ startButton.addEventListener("click", () => {
 
             moveball();
         }
-
-        
-        
     }
     else{
         location.reload();
@@ -80,7 +77,7 @@ function changeMode(){
     mode = !mode;
 
     if(!mode){
-        document.getElementById("mode").src = "src/styles/2p.svg"
+        document.getElementById("mode").src = "src/styles/icons/2p.svg"
 
         if(!start){
             restart(ballDirectionX)
@@ -88,24 +85,24 @@ function changeMode(){
             var counter = 1;
             view.removeChild(ball);
         
-            counterInterval = setInterval(function () {
-                if (counter > 0) {
-                    gametitle.textContent = "1P";
-                    counter--;
-                } else {
-                    clearInterval(counterInterval);
-                    setTimeout(function () {
-                        gametitle.textContent = "";
-                        view.appendChild(ball);
-                        speedball = 4;
-                    }, 1000);
-                }
-            }, 1000);
+            // counterInterval = setInterval(function () {
+            //     if (counter > 0) {
+            //         gametitle.textContent = "1P";
+            //         counter--;
+            //     } else {
+            //         clearInterval(counterInterval);
+            //         setTimeout(function () {
+            //             gametitle.textContent = "";
+            //             view.appendChild(ball);
+            //             speedball = 4;
+            //         }, 1000);
+            //     }
+            // }, 1000);
         }
         
     }
     else{
-        document.getElementById("mode").src = "src/styles/1p.svg"
+        document.getElementById("mode").src = "src/styles/icons/1p.svg"
 
         if(!start){
             restart(ballDirectionX)
@@ -113,19 +110,19 @@ function changeMode(){
             var counter = 1;
             view.removeChild(ball);
         
-            counterInterval = setInterval(function () {
-                if (counter > 0) {
-                    gametitle.textContent = "2P";
-                    counter--;
-                } else {
-                    clearInterval(counterInterval);
-                    setTimeout(function () {
-                        gametitle.textContent = "";
-                        view.appendChild(ball);
-                        speedball = 4;
-                    }, 1000);
-                }
-            }, 1000);    
+            // counterInterval = setInterval(function () {
+            //     if (counter > 0) {
+            //         gametitle.textContent = "2P";
+            //         counter--;
+            //     } else {
+            //         clearInterval(counterInterval);
+            //         setTimeout(function () {
+            //             gametitle.textContent = "";
+            //             view.appendChild(ball);
+            //             speedball = 4;
+            //         }, 1000);
+            //     }
+            // }, 1000);    
         }
     }
 }
@@ -134,7 +131,7 @@ modeGame.addEventListener("click", () => {
     changeMode();
 })
 
-function restart(inicialDiretionX, number){ //
+function restart(inicialDiretionX){ 
     topPositonPlayer1 = 150;
     leftPositionPlayer1 = 10;
     player1.style.top = 150 + "px";
@@ -155,14 +152,17 @@ function restart(inicialDiretionX, number){ //
     ball.style.top = topPositionBall + "px";
     ball.style.left = leftPositionBall + "px";
     counterGoals();
-    if(number == 1){
-        startCounter();
-    }
+    
+    // if(mode){
+    //     startCounter();
+    // }
+
+    startCounter();
     
 }
 
 restartButton.addEventListener("click", () => {
-    restart(ballDirectionX, 1);
+    restart(ballDirectionX);
 })
 
 document.addEventListener("keydown", (event) => {
@@ -226,7 +226,6 @@ function moveball() {
         ball.style.top = topPositionBall + "px";
 
         if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
-            ballDirectionX *= -1;
 
             if(mode){
                 if (leftPositionBall <= 0) {
@@ -237,12 +236,12 @@ function moveball() {
                     counterGoals(player2);
                 }
             }
-            else{
+            else if(!mode){
                 if (leftPositionBall <= 0) {
                     console.log("3"); // function gols
                     counterGoals(player1);
                 } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
-                    console.log("2"); // function gols
+                    ballDirectionX *= -1;
                 }
             }
             
@@ -420,8 +419,10 @@ function counterGoals(player){ //melhorar
 
 }
 
-function startCounter() {
+function startCounter() { //desabilitar o botão durante o contador
     var counter = 3;
+    modeGame.disabled = true;
+    restartButton.disabled = true;
     view.removeChild(ball);
     
     counterInterval = setInterval(function () {
@@ -430,12 +431,14 @@ function startCounter() {
             counter--;
         } else {
             clearInterval(counterInterval);
-            gametitle.textContent = "GO!";
-            gametitle.classList.add("scale-up");
+            // gametitle.textContent = "GO!";
+            // gametitle.classList.add("scale-up");
             setTimeout(function () {
                 gametitle.textContent = "";
-                gametitle.classList.remove("scale-up");
+                // gametitle.classList.remove("scale-up");
                 view.appendChild(ball);
+                modeGame.disabled = false;
+                restartButton.disabled = false;
                 speedball = 4;
             }, 1000);
         }

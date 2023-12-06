@@ -37,8 +37,8 @@ body{
 .View {
     display: flex;
     background-color: #3498db; 
-    width: 950px;
-    /* width: 90%; */
+    /* width: 950px; */
+    width: 90%;
     height: 400px;
     margin: 20px; 
     border-radius: 10px; 
@@ -51,9 +51,11 @@ body{
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-left: 10px;
 }
 
 .developer-credit {
+    display: flex;
     font-family: 'Arial', sans-serif;
     text-align: center;
     font-size: 14px;
@@ -148,6 +150,9 @@ body{
     transform: scale(1.1);
 }
 
+#moreAboutMe:hover{
+    transform: scale(1.5);
+}
 button:hover {
     background-color: #000000; 
 }
@@ -190,5 +195,6 @@ button:active {
 }
 
 .rotate {
-    animation: rotate 2s linear infinite;
+    animation: rotate 1s linear infinite; 
+    /* ou 2s */
 }
