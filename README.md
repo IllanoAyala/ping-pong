@@ -32,13 +32,3 @@ Mantenha a bola em movimento e evite que ela ultrapasse a raquete do jogador adv
 
 ### QUALQUER BUG APERTE O `Restart` (LOL)
 
-## (Fiz esse jogo com o intuito de impressionar ou decepcionar uma garota)
-
-### Achei Importante Add:
-```bash
-*mostro o jogo para ela*
-
-Ela: "Achei meio merda esse esquema de cores, que jogo ruim"
-
-*detalhe: ela perdeu de 7x1*
-```
