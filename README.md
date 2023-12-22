@@ -32,3 +32,8 @@ Mantenha a bola em movimento e evite que ela ultrapasse a raquete do jogador adv
 
 ### QUALQUER BUG APERTE O `Restart` (LOL)
 
+##Page: 
+
+![image](https://github.com/IllanoAyala/Ping-Pong/assets/92798837/15d68522-4d39-41a1-a316-1ca82f1dca10)
+
+
