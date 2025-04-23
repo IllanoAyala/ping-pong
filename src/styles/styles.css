@@ -36,14 +36,14 @@ body{
 
 .View {
     display: flex;
-    background-color: #3498db; 
+    background-color: #3498db;
     /* width: 950px; */
     width: 90%;
     height: 400px;
-    margin: 20px; 
-    border-radius: 10px; 
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
-    position: relative; 
+    margin: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
     justify-content: center;
 }
 
@@ -83,21 +83,21 @@ body{
     display: flex;
     background-color: #000000;
     width: 10px;
-    
+
 }
 
 #player1 {
     width: 10px;
     height: 150px;
-    background-color: #333; 
-    position: absolute; 
+    background-color: #333;
+    position: absolute;
 }
 
 #player2 {
     width: 10px;
     height: 150px;
-    background-color: #333; 
-    position: absolute; 
+    background-color: #333;
+    position: absolute;
 }
 
 #ball {
@@ -117,8 +117,8 @@ body{
     font-size: 56px;
     font-weight: bold;
     padding: 10px 20px;
-    background-color:  #000000; 
-    color: #fff; 
+    background-color:  #000000;
+    color: #fff;
     border: none;
     border-radius: 5px;
 }
@@ -128,8 +128,8 @@ body{
     font-size: 16px;
     font-weight: bold;
     padding: 10px 20px;
-    background-color: #000000; 
-    color: #fff; 
+    background-color: #000000;
+    color: #fff;
     border-radius: 5px;
     border: none;
 }
@@ -154,19 +154,19 @@ body{
     transform: scale(1.5);
 }
 button:hover {
-    background-color: #000000; 
+    background-color: #000000;
 }
 
 button:active {
-    background-color: #000000; 
+    background-color: #000000;
 }
 
 #modeGameButton {
     font-family: 'Arial', sans-serif;
     font-size: 16px;
     font-weight: bold;
-    background-color: #000000; 
-    color: #fff; 
+    background-color: #000000;
+    color: #fff;
     border-radius: 5px;
     border: none;
     margin-left: 4px;
@@ -177,7 +177,7 @@ button:active {
         transform: scale(0.5);
     }
     to {
-        transform: scale(1.5); 
+        transform: scale(1.5);
     }
 }
 
@@ -195,6 +195,9 @@ button:active {
 }
 
 .rotate {
-    animation: rotate 1s linear infinite; 
+    animation: rotate 1s linear infinite;
     /* ou 2s */
 }
+
+
+

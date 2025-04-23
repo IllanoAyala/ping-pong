@@ -1,447 +1,375 @@
-const player1 = document.getElementById("player1");
-const player2 = document.getElementById("player2");
-const ball = document.getElementById("ball");
-const view = document.querySelector(".View");
-var gametitle = document.getElementById("gametitle");
-const viewRect = view.getBoundingClientRect();
-const player1Rect = player1.getBoundingClientRect();
-const player2Rect = player2.getBoundingClientRect();
-const startButton = document.getElementById("startbutton");
-const modeGame = document.getElementById("modeGameButton");
-const scores = document.querySelectorAll("#score");
-const restartButton = document.getElementById("restartbutton")
-const player1Keys = {};
-const player2Keys = {};
+class PongGame {
+    constructor() {
+        this.player1 = document.getElementById("player1");
+        this.player2 = document.getElementById("player2");
+        this.ball = document.getElementById("ball");
+        this.view = document.querySelector(".View");
+        this.gametitle = document.getElementById("gametitle");
+        this.startButton = document.getElementById("startbutton");
+        this.modeGame = document.getElementById("modeGameButton");
+        this.scores = document.querySelectorAll("#score");
+        this.restartButton = document.getElementById("restartbutton");
 
-let movePlayersAnimation;
-let moveBallAnimation;
-let topPositonPlayer1 = 150;
-let leftPositionPlayer1 = 10;
-let topPositonPlayer2 = 150;
-let leftPositionPlayer2 = 90;
-let topPositionBall = 200;
-let leftPositionBall = 400;
-let ballDirectionX = Math.random() < 0.5 ? 1 : -1;
-let ballDirectionY = 0;
-let step = 7;
-let speedball = 4;
-let start = true;
-let mode = true;
-let golsP1 = 0;
-let golsP2 = 0;
+        this.player1Keys = {};
+        this.player2Keys = {};
 
-view.removeChild(player1);
-view.removeChild(player2);
-view.removeChild(ball);
-counterGoals();
+        this.topPositonPlayer1 = 0;
+        this.leftPositionPlayer1 = 2.5;
 
-const keys = {};
+        this.topPositonPlayer2 = 0;
+        this.leftPositionPlayer2 = 96;
 
-startButton.addEventListener("click", () => {
-    start = !start;
-    if (!start) {
-        if(!mode){
-            view.appendChild(player1);
-            view.appendChild(ball);
+        this.topPositionBall = 200;
+        this.leftPositionBall = 400;
+        this.ballDirectionX = Math.random() < 0.5 ? 1 : -1;
+        this.ballDirectionY = 0;
+        this.step = 7;
+        this.speedball = 4;
+        this.start = true;
+        this.mode = true;
+        this.golsP1 = 0;
+        this.golsP2 = 0;
 
-            startButton.textContent = "Stop";
-            player1.style.top = topPositonPlayer1 + "px";
-            player1.style.left = leftPositionPlayer1 + "%";
-            ball.style.top = topPositionBall + "px";
-            ball.style.left = leftPositionBall + "px";
+        this.movePlayersAnimation = null;
+        this.moveBallAnimation = null;
 
-            moveball();
-        }
-        else{
-            view.appendChild(player1);
-            view.appendChild(player2);
-            view.appendChild(ball);
+        this.view.removeChild(this.player1);
+        this.view.removeChild(this.player2);
+        this.view.removeChild(this.ball);
 
-            startButton.textContent = "Stop";
-            player1.style.top = topPositonPlayer1 + "px";
-            player1.style.left = leftPositionPlayer1 + "%";
-            player2.style.top = topPositonPlayer2 + "px";
-            player2.style.left = leftPositionPlayer2 + "%";
-            ball.style.top = topPositionBall + "px";
-            ball.style.left = leftPositionBall + "px";
+        this.counterGoals();
+        this.setupEventListeners();
 
-            moveball();
-        }
+        this.centerPlayers();
+        this.updatePositions();
+
+        window.addEventListener("resize", () => {
+            this.centerPlayers();
+            this.updatePositions();
+        });
     }
-    else{
-        location.reload();
+
+    centerPlayers() {
+        const viewHeight = this.view.clientHeight;
+        const playerHeight = this.player1.clientHeight;
+
+        this.topPositonPlayer1 = (viewHeight - playerHeight) / 2;
+        this.leftPositionPlayer1 = 2.5;
+
+        this.topPositonPlayer2 = (viewHeight - playerHeight) / 2;
+        this.leftPositionPlayer2 = 96;
     }
-});
 
-function changeMode(){
-    mode = !mode;
+    setupEventListeners() {
+        this.startButton.addEventListener("click", () => this.toggleStart());
+        this.modeGame.addEventListener("click", () => this.changeMode());
+        this.restartButton.addEventListener("click", () => {
+            if (!this.restartButton.disabled) {
+                this.restart(this.ballDirectionX);
+            }
+        });
 
-    if(!mode){
-        document.getElementById("mode").src = "src/styles/icons/2p.svg"
-
-        if(!start){
-            restart(ballDirectionX)
-            view.removeChild(player2);
-            var counter = 1;
-            view.removeChild(ball);
-        
-            // counterInterval = setInterval(function () {
-            //     if (counter > 0) {
-            //         gametitle.textContent = "1P";
-            //         counter--;
-            //     } else {
-            //         clearInterval(counterInterval);
-            //         setTimeout(function () {
-            //             gametitle.textContent = "";
-            //             view.appendChild(ball);
-            //             speedball = 4;
-            //         }, 1000);
-            //     }
-            // }, 1000);
-        }
-        
+        document.addEventListener("keydown", (event) => this.onKeyDown(event));
+        document.addEventListener("keyup", (event) => this.onKeyUp(event));
     }
-    else{
-        document.getElementById("mode").src = "src/styles/icons/1p.svg"
 
-        if(!start){
-            restart(ballDirectionX)
-            view.appendChild(player2)
-            var counter = 1;
-            view.removeChild(ball);
-        
-            // counterInterval = setInterval(function () {
-            //     if (counter > 0) {
-            //         gametitle.textContent = "2P";
-            //         counter--;
-            //     } else {
-            //         clearInterval(counterInterval);
-            //         setTimeout(function () {
-            //             gametitle.textContent = "";
-            //             view.appendChild(ball);
-            //             speedball = 4;
-            //         }, 1000);
-            //     }
-            // }, 1000);    
+    toggleStart() {
+        this.start = !this.start;
+        if (!this.start) {
+            if (!this.mode) {
+                this.view.appendChild(this.player1);
+                this.view.appendChild(this.ball);
+                this.centerPlayers();
+                this.updatePositions();
+                this.startButton.textContent = "Stop";
+                this.moveball();
+            } else {
+                this.view.appendChild(this.player1);
+                this.view.appendChild(this.player2);
+                this.view.appendChild(this.ball);
+                this.centerPlayers();
+                this.updatePositions();
+                this.startButton.textContent = "Stop";
+                this.moveball();
+            }
+        } else {
+            location.reload();
         }
     }
-}
 
-modeGame.addEventListener("click", () => {
-    changeMode();
-})
-
-function restart(inicialDiretionX){ 
-    topPositonPlayer1 = 150;
-    leftPositionPlayer1 = 10;
-    player1.style.top = 150 + "px";
-    player1.style.left = 10 + "%";
-    
-    topPositonPlayer2 = 150;
-    leftPositionPlayer2 = 90;
-    player2.style.top = 150 + "px";
-    player2.style.left = 90 + "%";
-
-    topPositionBall = 200;
-    leftPositionBall = 400;
-    speedball = 0;
-    ballDirectionX = inicialDiretionX;
-    ballDirectionY = 0;
-    golsP1 = 0;
-    golsP2 = 0;
-    ball.style.top = topPositionBall + "px";
-    ball.style.left = leftPositionBall + "px";
-    counterGoals();
-    
-    // if(mode){
-    //     startCounter();
-    // }
-
-    startCounter();
-    
-}
-
-restartButton.addEventListener("click", () => {
-    restart(ballDirectionX);
-})
-
-document.addEventListener("keydown", (event) => {
-    if (!start) {
-        if (event.key === "w") player1Keys.up = true;
-        if (event.key === "s") player1Keys.down = true;
-
-        if (event.key === "ArrowUp") player2Keys.up = true;
-        if (event.key === "ArrowDown") player2Keys.down = true;
-
-        if (!movePlayersAnimation) {
-            movePlayersAnimation = requestAnimationFrame(moverPlayers);
-        }
-    }
-});
-
-document.addEventListener("keyup", (event) => {
-    if (!start) {
-        if (event.key === "w") player1Keys.up = false;
-        if (event.key === "s") player1Keys.down = false;
-
-        if (event.key === "ArrowUp") player2Keys.up = false;
-        if (event.key === "ArrowDown") player2Keys.down = false;
-    }
-});
-
-function moverPlayers() {
-    if (player1Keys.up) movePlayer1(-step);
-    if (player1Keys.down) movePlayer1(step);
-
-    if (player2Keys.up) movePlayer2(-step);
-    if (player2Keys.down) movePlayer2(step);
-
-    movePlayersAnimation = requestAnimationFrame(moverPlayers);
-}
-
-function movePlayer1(topChange) {
-    const newTop = topPositonPlayer1 + topChange;
-
-    if (newTop >= 0 && newTop + player1Rect.height <= viewRect.height) {
-        topPositonPlayer1 = newTop;
-        player1.style.top = topPositonPlayer1 + "px";
-    }
-}
-
-function movePlayer2(topChange) {
-    const newTop = topPositonPlayer2 + topChange;
-
-    if (newTop >= 0 && newTop + player2Rect.height <= viewRect.height) {
-        topPositonPlayer2 = newTop;
-        player2.style.top = topPositonPlayer2 + "px";
-    }
-}
-
-function moveball() {
-    ball.classList.add("rotate"); //criar elemento div para colocar o rotate
-    function animate() {
-        leftPositionBall += speedball * ballDirectionX;
-        topPositionBall += speedball * ballDirectionY;
-        ball.style.left = leftPositionBall + "px";
-        ball.style.top = topPositionBall + "px";
-
-        if (leftPositionBall <= 0 || leftPositionBall >= viewRect.width - ball.offsetWidth) {
-
-            if(mode){
-                if (leftPositionBall <= 0) {
-                    console.log("1"); // function gols
-                    counterGoals(player1);
-                } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
-                    console.log("2"); // function gols
-                    counterGoals(player2);
+    changeMode() {
+        this.mode = !this.mode;
+        const modeIcon = document.getElementById("mode");
+        if (!this.mode) {
+            modeIcon.src = "src/styles/icons/2p.svg";
+            if (!this.start) {
+                this.restart(this.ballDirectionX);
+                this.view.removeChild(this.player2);
+                if(this.ball.parentNode === this.view) {
+                    this.view.removeChild(this.ball);
                 }
             }
-            else if(!mode){
-                if (leftPositionBall <= 0) {
-                    console.log("3"); // function gols
-                    counterGoals(player1);
-                } else if (leftPositionBall >= viewRect.width - ball.offsetWidth) {
-                    ballDirectionX *= -1;
+        } else {
+            modeIcon.src = "src/styles/icons/1p.svg";
+            if (!this.start) {
+                this.restart(this.ballDirectionX);
+                this.view.appendChild(this.player2);
+                if(this.ball.parentNode === this.view) {
+                    this.view.removeChild(this.ball);
                 }
             }
-            
         }
-
-        else if (topPositionBall <= 2 || topPositionBall >= viewRect.height - ball.offsetHeight + 2) {
-            ballDirectionY *= -1;
-        }
-
-        else{
-            checkCollision();
-        }
-
-        moveBallAnimation = requestAnimationFrame(animate);
     }
 
-    setInterval(function(){
-        if(speedball != 0)
-        {
-            if(speedball <= 10)
-            {
-                speedball += 0.5;
+    restart(initialDirectionX) {
+        if(!this.start) {
+            this.centerPlayers();
+            this.topPositionBall = 200;
+            this.leftPositionBall = 400;
+            this.speedball = 0;
+            this.ballDirectionX = initialDirectionX;
+            this.ballDirectionY = 0;
+            this.golsP1 = 0;
+            this.golsP2 = 0;
+            this.updatePositions();
+            this.counterGoals();
+            this.startCounter();
+        }
+    }
+
+    resetPositions(ballDirectionX) {
+        this.centerPlayers();
+        this.topPositionBall = 200;
+        this.leftPositionBall = 400;
+        this.speedball = 0;
+        this.ballDirectionX = ballDirectionX;
+        this.ballDirectionY = 0;
+        this.updatePositions();
+        this.startCounter();
+    }
+
+    updatePositions() {
+        this.player1.style.top = this.topPositonPlayer1 + "px";
+        this.player1.style.left = this.leftPositionPlayer1 + "%";
+        this.player2.style.top = this.topPositonPlayer2 + "px";
+        this.player2.style.left = this.leftPositionPlayer2 + "%";
+        this.ball.style.top = this.topPositionBall + "px";
+        this.ball.style.left = this.leftPositionBall + "px";
+    }
+
+    onKeyDown(event) {
+        if (!this.start) {
+            if (event.key === "w") this.player1Keys.up = true;
+            if (event.key === "s") this.player1Keys.down = true;
+            if (event.key === "ArrowUp") this.player2Keys.up = true;
+            if (event.key === "ArrowDown") this.player2Keys.down = true;
+            if (!this.movePlayersAnimation) {
+                this.movePlayersAnimation = requestAnimationFrame(() => this.moverPlayers());
             }
         }
-    }, 2000)
+    }
 
-    moveBallAnimation = requestAnimationFrame(animate);
-}
-
-function checkCollision() { 
-    const ballRect = ball.getBoundingClientRect();
-    const player1Rect = player1.getBoundingClientRect();
-    const player2Rect = player2.getBoundingClientRect();
-
-    if(mode){
-        if (
-            ballRect.right >= player1Rect.left &&
-            ballRect.left <= player1Rect.right &&
-            ballRect.bottom >= player1Rect.top &&
-            ballRect.top <= player1Rect.bottom
-        ) {
-            collisionPlayer(player1Rect);
-        }
-        if (
-            ballRect.right >= player2Rect.left &&
-            ballRect.left <= player2Rect.right &&
-            ballRect.bottom >= player2Rect.top &&
-            ballRect.top <= player2Rect.bottom
-        ) {
-            collisionPlayer(player2Rect);
+    onKeyUp(event) {
+        if (!this.start) {
+            if (event.key === "w") this.player1Keys.up = false;
+            if (event.key === "s") this.player1Keys.down = false;
+            if (event.key === "ArrowUp") this.player2Keys.up = false;
+            if (event.key === "ArrowDown") this.player2Keys.down = false;
         }
     }
-    else{
-        if (
-            ballRect.right >= player1Rect.left &&
-            ballRect.left <= player1Rect.right &&
-            ballRect.bottom >= player1Rect.top &&
-            ballRect.top <= player1Rect.bottom
-        ) {
-            collisionPlayer(player1Rect);
+
+    moverPlayers() {
+        const viewRect = this.view.getBoundingClientRect();
+        const player1Rect = this.player1.getBoundingClientRect();
+        const player2Rect = this.player2.getBoundingClientRect();
+
+        if (this.player1Keys.up) this.movePlayer1(-this.step, player1Rect, viewRect);
+        if (this.player1Keys.down) this.movePlayer1(this.step, player1Rect, viewRect);
+        if (this.player2Keys.up) this.movePlayer2(-this.step, player2Rect, viewRect);
+        if (this.player2Keys.down) this.movePlayer2(this.step, player2Rect, viewRect);
+
+        this.movePlayersAnimation = requestAnimationFrame(() => this.moverPlayers());
+    }
+
+    movePlayer1(topChange, playerRect, viewRect) {
+        const newTop = this.topPositonPlayer1 + topChange;
+        if (newTop >= 0 && newTop + playerRect.height <= viewRect.height) {
+            this.topPositonPlayer1 = newTop;
+            this.player1.style.top = this.topPositonPlayer1 + "px";
         }
     }
-    function collisionPlayer(playerRect){
+
+    movePlayer2(topChange, playerRect, viewRect) {
+        const newTop = this.topPositonPlayer2 + topChange;
+        if (newTop >= 0 && newTop + playerRect.height <= viewRect.height) {
+            this.topPositonPlayer2 = newTop;
+            this.player2.style.top = this.topPositonPlayer2 + "px";
+        }
+    }
+
+    moveball() {
+        this.ball.classList.add("rotate");
+        const viewRect = this.view.getBoundingClientRect();
+        const animate = () => {
+            this.leftPositionBall += this.speedball * this.ballDirectionX;
+            this.topPositionBall += this.speedball * this.ballDirectionY;
+            this.ball.style.left = this.leftPositionBall + "px";
+            this.ball.style.top = this.topPositionBall + "px";
+
+            if (this.leftPositionBall <= 0 || this.leftPositionBall >= viewRect.width - this.ball.offsetWidth) {
+                if (this.mode) {
+                    if (this.leftPositionBall <= 0) this.counterGoals(this.player1);
+                    else if (this.leftPositionBall >= viewRect.width - this.ball.offsetWidth) this.counterGoals(this.player2);
+                } else if (!this.mode) {
+                    if (this.leftPositionBall <= 0) this.counterGoals(this.player1);
+                    else if (this.leftPositionBall >= viewRect.width - this.ball.offsetWidth) this.ballDirectionX *= -1;
+                }
+            } else if (this.topPositionBall <= 2 || this.topPositionBall >= viewRect.height - this.ball.offsetHeight + 2) {
+                this.ballDirectionY *= -1;
+            } else {
+                this.checkCollision();
+            }
+
+            this.moveBallAnimation = requestAnimationFrame(animate);
+        };
+
+        setInterval(() => {
+            if (this.speedball !== 0 && this.speedball <= 10) {
+                this.speedball += 0.5;
+            }
+        }, 2000);
+
+        this.moveBallAnimation = requestAnimationFrame(animate);
+    }
+
+    checkCollision() {
+        const ballRect = this.ball.getBoundingClientRect();
+        const player1Rect = this.player1.getBoundingClientRect();
+        const player2Rect = this.player2.getBoundingClientRect();
+
+        if (this.mode) {
+            if (this.isCollision(ballRect, player1Rect)) {
+                this.resolveCollision(this.player1, player1Rect, ballRect, 1);
+            }
+            if (this.isCollision(ballRect, player2Rect)) {
+                this.resolveCollision(this.player2, player2Rect, ballRect, 2);
+            }
+        } else {
+            if (this.isCollision(ballRect, player1Rect)) {
+                this.resolveCollision(this.player1, player1Rect, ballRect, 1);
+            }
+        }
+    }
+
+    resolveCollision(player, playerRect, ballRect, direction) {
+        if (direction === 1) {
+            this.leftPositionBall = playerRect.right - this.view.getBoundingClientRect().left;
+        } else {
+            this.leftPositionBall = playerRect.left - this.view.getBoundingClientRect().left - this.ball.offsetWidth;
+        }
+        this.collisionPlayer(playerRect, ballRect);
+    }
+
+    isCollision(ballRect, playerRect) {
+        return (
+            ballRect.right >= playerRect.left &&
+            ballRect.left <= playerRect.right &&
+            ballRect.bottom >= playerRect.top &&
+            ballRect.top <= playerRect.bottom
+        );
+    }
+
+    collisionPlayer(playerRect, ballRect) {
         const ballCenterY = (ballRect.top + ballRect.bottom) / 2;
         const playerCenterY = (playerRect.top + playerRect.bottom) / 2;
         const ballPositionX = (ballRect.left + ballRect.right) / 2;
         const playerPositionX = (playerRect.left + playerRect.right) / 2;
 
-        ballDirectionY = ballCenterY < playerCenterY ? getRandomValueY() : -1 * getRandomValueY();
-        ballDirectionX = ballPositionX < playerPositionX ? -1 : 1;
-
-        colorChange();
-    }
-}
-
-
-function getRandomValueY() {
-    return Math.random() * 2;
-}
-
-function getColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-      color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}
-
-function randomColor(baseColor) {
-    const variation = 72; 
-
-    const offset = () => Math.floor(Math.random() * (2 * variation + 1)) - variation;
-    const clamp = (value) => Math.min(255, Math.max(0, value));
-    const toHex = (value) => (value < 16 ? '0' : '') + value.toString(16);
-
-    const baseRed = parseInt(baseColor.slice(1, 3), 16);
-    const baseGreen = parseInt(baseColor.slice(3, 5), 16);
-    const baseBlue = parseInt(baseColor.slice(5, 7), 16);
-
-    const newRed = clamp(baseRed + offset());
-    const newGreen = clamp(baseGreen + offset());
-    const newBlue = clamp(baseBlue + offset());
-
-    const newColor = `#${toHex(newRed)}${toHex(newGreen)}${toHex(newBlue)}`;
-
-    const luminance = (0.299 * newRed + 0.587 * newGreen + 0.114 * newBlue) / 255;
-    const color = luminance > 0.5 ? '#000000' : '#ffffff';
-
-    ball.style.backgroundColor = color;
-
-    return newColor;
-}
-
-function colorChange() {
-    const baseColor = getColor();
-
-    // document.body.style.backgroundColor = `linear-gradient(to bottom, white, ${randomColor(baseColor)})`;
-    view.style.backgroundColor = randomColor(baseColor);
-    player1.style.backgroundColor = randomColor(baseColor);
-    player2.style.backgroundColor = player1.style.backgroundColor;
-}
-
-function counterGoals(player){ //melhorar
-
-    if(player === player1)
-    {
-        golsP1 += 1;
-        scores[1].textContent = golsP1;
-        topPositonPlayer1 = 150;
-        leftPositionPlayer1 = 100;
-        player1.style.top = 150 + "px";
-        player1.style.left = 10 + "%";
-        
-        topPositonPlayer2 = 150;
-        leftPositionPlayer2 = 90;
-        player2.style.top = 150 + "px";
-        player2.style.left = 90 + "%";
-
-        topPositionBall = 200;
-        leftPositionBall = 400;
-        speedball = 0;
-        ballDirectionX = -1;
-        ballDirectionY = 0;
-        ball.style.top = topPositionBall + "px";
-        ball.style.left = leftPositionBall + "px";
-        startCounter();
-    }
-    else if(player === player2){
-        golsP2 += 1;
-        scores[0].textContent = golsP2;
-        topPositonPlayer1 = 150;
-        leftPositionPlayer1 = 100;
-        player1.style.top = 150 + "px";
-        player1.style.left = 10 + "%";
-        
-        topPositonPlayer2 = 150;
-        leftPositionPlayer2 = 780;
-        player2.style.top = 150 + "px";
-        player2.style.left = 90 + "%";
-
-        topPositionBall = 200;
-        leftPositionBall = 400;
-        speedball = 0;
-        ballDirectionX = 1;
-        ballDirectionY = 0;
-        ball.style.top = topPositionBall + "px";
-        ball.style.left = leftPositionBall + "px"; 
-        startCounter();
-    }
-    else{ //atualizar placar
-        scores[0].textContent = golsP2;
-        scores[1].textContent = golsP1;
+        this.ballDirectionY = ballCenterY < playerCenterY ? this.getRandomValueY() : -1 * this.getRandomValueY();
+        this.ballDirectionX = ballPositionX < playerPositionX ? -1 : 1;
+        this.colorChange();
     }
 
-}
+    getRandomValueY() {
+        return Math.random() * 2;
+    }
 
-function startCounter() { //desabilitar o botão durante o contador
-    var counter = 3;
-    modeGame.disabled = true;
-    restartButton.disabled = true;
-    view.removeChild(ball);
-    
-    counterInterval = setInterval(function () {
-        if (counter > 0) {
-            gametitle.textContent = counter;
-            counter--;
-        } else {
-            clearInterval(counterInterval);
-            // gametitle.textContent = "GO!";
-            // gametitle.classList.add("scale-up");
-            setTimeout(function () {
-                gametitle.textContent = "";
-                // gametitle.classList.remove("scale-up");
-                view.appendChild(ball);
-                modeGame.disabled = false;
-                restartButton.disabled = false;
-                speedball = 4;
-            }, 1000);
+    getColor() {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
         }
-    }, 1000);   
+        return color;
+    }
+
+    invertColor(hex) {
+        let r = 255 - parseInt(hex.slice(1, 3), 16);
+        let g = 255 - parseInt(hex.slice(3, 5), 16);
+        let b = 255 - parseInt(hex.slice(5, 7), 16);
+
+        return '#' + [r, g, b].map(x => {
+            const hex = x.toString(16);
+            return hex.length === 1 ? '0' + hex : hex;
+        }).join('');
+    }
+
+    getContrastColor(hex) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        const yiq = ((r * 299) + (g * 587) + (b * 114)) / 1000;
+        return yiq >= 128 ? '#222222' : '#FFFFFF';
+    }
+
+    colorChange() {
+        const baseColor = this.getColor();
+        this.view.style.backgroundColor = baseColor;
+        const playerColor = this.getContrastColor(baseColor);
+        this.player1.style.backgroundColor = playerColor;
+        this.player2.style.backgroundColor = playerColor;
+        this.ball.style.backgroundColor = playerColor;
+    }
+
+    counterGoals(player) {
+        if (player === this.player1) {
+            this.golsP1 += 1;
+            this.scores[1].textContent = this.golsP1;
+            this.resetPositions(-1);
+        } else if (player === this.player2) {
+            this.golsP2 += 1;
+            this.scores[0].textContent = this.golsP2;
+            this.resetPositions(1);
+        } else {
+            this.scores[0].textContent = this.golsP2;
+            this.scores[1].textContent = this.golsP1;
+        }
+    }
+
+    startCounter() {
+        let counter = 3;
+        this.modeGame.disabled = true;
+        this.restartButton.disabled = true;
+        if (this.ball.parentNode === this.view) {
+            this.view.removeChild(this.ball);
+        }
+
+        let counterInterval = setInterval(() => {
+            if (counter > 0) {
+                this.gametitle.textContent = counter;
+                counter--;
+            } else {
+                clearInterval(counterInterval);
+                setTimeout(() => {
+                    this.gametitle.textContent = "";
+                    this.view.appendChild(this.ball);
+                    this.modeGame.disabled = false;
+                    this.restartButton.disabled = false;
+                    this.speedball = 4;
+                }, 1000);
+            }
+        }, 1000);
+    }
 }
 
+const game = new PongGame();
